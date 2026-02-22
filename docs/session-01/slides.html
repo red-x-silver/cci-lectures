@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <title>Artificial Intelligence </title>
+  <!-- This whole presentation was made with Big: https://github.com/tmcw/big -->
+  
+  <link href="../big/big.css" rel="stylesheet" type="text/css" />
+  <script src="../big/big.js"></script>
+  <link href="../big/themes/lightWhite.css" rel="stylesheet" type="text/css" />
+
+  <!-- Favicon link below, via https://emojitofavicon.com -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🍴</text></svg>"></link>
+  
+  <style>
+    body {
+      background-color: #EDDD6E;
+      font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+      /* font-weight: 700;*/
+      margin: 0;
+      padding: 0;
+      font-style: normal;
+      font-size: 21px;
+    }
+  </style>
+  
+</head>
+<body>
+  <div>
+    Session 01: 
+    <br />
+    Quick recap + AI in Computer Vision part 1 👁️  
+  </div>
+    
+  <div>Welcome 👩‍🎤🧑‍🎤👨‍🎤</div>
+  
+  <div> By the end of this lecture, we'll have learnt about:
+  
+     <br /> The theoretical: 
+     <br /> - Quick revisions on data modalities and neural networks
+     <br />  - AI applications in Computer Vision part 01
+     <br />  - - Image classification, Object detection, Image segmentation, Keypoint detection
+     <br /> The practical: 
+     <br /> - test(inference) models on hugging face
+     <br /> - test(inference) models from Tensorflow.js
+     <br /> - research on models adopted by Apple Core ML
+    <br /> - test(inference) YOLOv11 on your laptop / google colab notebook
+  
+  </div>
+
+   <div>We will NOT deep dive into the technical details behind the neural networks (architectures, forward pass, backprop, etc.) for today, apart from a gentle recap!
+<br /> - We'll instead take a look at quite a few cool applications of neural networks!
+
+   </div>
+  
+  <div> First of all, don't forget to confirm your attendence on <a href="https://www.arts.ac.uk/study-at-ual/course-regulations/attendance-policy/attendance-monitoring"> SEAtS App!  </a></div>
+
+
+
+  <div>     
+       About me
+                  <br /> 
+                
+                <a href="xiaowan-yi.com">xiaowan yi</a>: sh-iao one e
+
+                <br />
+                
+                - I was born in Chengdu, China. My city is famous for panda 🐼, taoism ☯️ and spicy food 🌶️.
+                     <br /> 
+                - I live in Surrey Quays now.
+                 <br /> 
+                
+- I'm completing my PhD research in AI&Music at QMUL.
+  <br /> 
+- I make sound and you can find some of my works <a href="https://vimeo.com/user65401583">here</a>.
+    <br /> 
+- I play drums 🥁 for electronic and groovy music.
+  </div>
+
+
+
+  <div> Recap on "data modality"</div>
+
+  <div> 
+    Data modalities🕶️
+     <br />    
+    Information that we can gather from the world and store in digital systems as "data", are mainly from four modalities:
+      <br />   
+    - 👁️Image (picture, video)
+      <br />   
+    - 📝Text (written language)
+      <br />   
+    - 🎵Audio (music, speech)
+      <br />   
+    - 🧩Tabular(this week's weather in degree celsius, everyone's birthday in this class, sensor data, etc.)
+      <br />  
+      Can you think of any information that is not from the four categories?
+  </div>
+  
+  
+  <div> 
+    Data modalities🕶️
+     <br />    
+    - Each data modality has its own characteristics and challenges for representation, processing and analysis.
+      <br />
+     - We structure our unit syllabus based on the different data modalities, each week focusing on one modality (with a few exceptions).
+      <br />
+  </div>
+
+    <div>
+      Modalities covered in the following weeks:
+ 
+    <br /> 
+    - AI in Computer Vision 👁️: images, multi-modal
+    <br /> 
+    - AI in audio and music 🎵: audio, multi-modal
+
+  </div>
+
+  <div> any questions so far? </div>
+
+   <div> Recap on neural networks</div>
+
+    <div> 
+    Recap on neural networks 🤖
+     <br />    
+    - Neural networks are a type of machine learning model that are inspired by the structure and function of the biological neural networks.
+      <br />
+    
+    <br />    
+    - Key points:
+      <br />    
+    - - Architectures
+      <br />
+    - - How to train a neural network?
+      <br />
+    - How to inference a neural network?
+    <br />
+    Recommended reading: 
+     <br />
+   - - <a href="http://neuralnetworksanddeeplearning.com/">Neural Networks and Deep Learning</a> by Michael Nielsen
+     <br />
+    - -  <a href="https://www.deeplearningbook.org/">Deep Learning Book</a> by Ian Goodfellow, Yoshua Bengio and Aaron Courville
+  </div>
+
+        <div> 
+    Neural network architecture 🎳
+    <br />    
+    - Neural nets comprise of layers.
+      <br />
+    - There are different types of layers (fully connected, convolutional, recurrent, attention, etc.)
+      <br />
+    - Here is <a href="https://docs.pytorch.org/docs/stable/nn.html">a list of layers implemented by Pytorch</a> (have you used Pytorch before?)
+    </div>
+
+
+
+        <div> 
+    Questions for checking understanding 🤔
+
+    <br />    
+    - What is an MLP?
+      <br />
+    - What is a CNN?
+      <br />
+    - What is an RNN?
+      <br />
+    - What is a Transformer?
+    </div>
+
+      <div> 
+   🤔 How to inference a neural network? The process:
+    <br />  - - feed input data into the model and get the output from the model
+      <br /> - - also called the forward pass
+     <br /> - - also called 'testing' or 'evaluation'
+      <br /> - - inference does not involve backpropagation
+      <br /> !No need to hard memorise!
+ </div>
+
+       <div> 
+     🤔 How to train a neural network? The process:
+    <br />  - - feed input data into the model and get the output from the model
+      <br /> - - compare the model output with the ground truth and calculate the loss
+      <br /> - - use backpropagation to update the model parameters
+      <br /> - - repeat the above steps until the model converges
+      <br /> - - this whole process is called training
+      <br /> - - training involves both forward pass and backward pass
+
+ </div>
+
+        <div> 
+ 
+    🤔 How to train a neural network? The dataset and splits:
+      <br /> - - training is done on a training dataset
+      <br /> - - the trained model is then evaluated on a validation dataset and/or a test dataset
+      <br /> - - the trained model is then deployed for inference on new data
+ </div>
+
+        <div> 
+  🤔 How to train a neural network? The hyperparameters: 
+
+      <br /> - - training is done using an optimisation algorithm (e.g. SGD, Adam, etc.)
+      <br /> - - training is done using a loss function (e.g. cross-entropy, MSE, etc.)
+      <br /> - - training is done using a learning rate (e.g. 0.001, 0.01, etc.)
+      <br /> - - training is done using a batch size (e.g. 32, 64, etc.)
+      <br /> - - training is done using a number of epochs (e.g. 10, 20, etc.)
+      <br /> - - training is done using a validation set to monitor overfitting
+      <br /> - - training is done using regularisation techniques (e.g. dropout, weight decay, etc.)
+ <br />
+      <br /> !No need to hard memorise! These knowledges are best internalised through hands-on practice.
+    </div>
+
+
+            <div> 
+ 
+     📙 Terminologies:
+      <br /> 1️⃣Pre-trained
+      <br /> - - means a ready-to-use model
+      <br /> - - means a model that has been trained on a dataset (often large) and can be fine-tuned on a smaller dataset for a specific task in the future
+       <br />
+      <br /> 2️⃣Fine-tuning 
+      <br /> - - means further training a pre-trained model on a smaller dataset for a specific task
+      <br /> - - means updating the model parameters using backpropagation on the smaller dataset
+      <br /> - - means the model is adapted to the specific task and the dataset
+      <br /> - - means the model is not trained from scratch
+       <br />
+      <br /> 3️⃣Transfer learning
+      <br /> - - means using a pre-trained model for a different but related task
+      <br /> - - also means the model is not trained from scratch
+      <br /> - - fine-tuning is a special case of transfer learning
+      <br /> - - transfer learning can be done without fine-tuning (e.g. using the pre-trained model as a feature extractor and adding new layers to the model for training on the new task)
+    </div>
+ </div>
+
+        <div> 
+
+    Recommended reading: 
+     <br />
+   - - <a href="http://neuralnetworksanddeeplearning.com/">Neural Networks and Deep Learning</a> by Michael Nielsen
+     <br />
+    - -  <a href="https://www.deeplearningbook.org/">Deep Learning Book</a> by Ian Goodfellow, Yoshua Bengio and Aaron Courville
+  </div>
+
+
+      <div> AI in Computer Vision part 01 👁️</div>
+
+
+      <div> Computer Vision: a field of AI that teaches computers to "see" and interpret the visual world from images and videos, and derive meaningful information from them. </div>
+
+          <div> First question: how does a model in our computer "see" an image? 👁️ 
+           <br />
+          - Model "sees" an image as numbers!
+           <br />  
+          - Digital images are made of pixels.
+          <br />
+          - Each pixel in the image is represented by a number (or a set of numbers for color images).  
+        </div>  
+
+  <div> 
+    👁️ Images represented by numbers:
+     <br />  
+    - Two numbers for its width and height (how many pixels).
+    <br />  
+    e.g. 3840 x 2160 for 4K resolution        
+    <br />      
+    - Sometimes another number for how many color channels there are.
+   <br />      
+    e.g. 256 x 256 x 3 for an RGB color image
+  </div>
+  
+  <div class='layout' style='grid-template-rows:55% 45%;'>
+  <img src='images/mario.png'/>
+  <div>Here is one way to numberify digital images:
+     <br />  
+  - Three numbers for each pixel representing the RGB values in color images, e.g. [256, 0, 128] for purple 🟪
+     <br />     
+  - One number for each pixel representing the greyscale value in grey images, e.g. [128] for a medium grey 🩶</div>
+  <br />     
+  - Put together these color-indicating numbers for all pixels in a multi-dimensional array (also called tensor in deep learning) to represent the image.
+  </div>
+
+
+  <div> After "seeing" the images, what meaningful information a model can derive from them? 👁️</div>
+
+      <div> 
+    👁️ Basic computer vision tasks: 
+     <br />    
+    - Image classification
+      <br />
+    - Object detection
+      <br />
+    - Image segmentation
+      <br />
+    - Keypoint detection
+    
+  </div>
+
+        <div> 
+    👁️ Basic computer vision tasks, characterised by the model (neural network) outputs:
+     <br />    
+    - Image classification: outputs a class label.
+      <br />
+    - Object detection: outputs bounding boxes and class labels.
+      <br />
+    - Image segmentation: outputs pixel-wise masks and class labels.
+      <br />
+    - Keypoint detection: outputs Keypoint and class labels.
+       
+  </div>
+
+
+      <div> 
+    👁️ What "meaningful information" can these tasks derive from images?
+     <br />    
+    - Image classification: what is in the image? 
+      <br />
+    - Object detection: what is in the image and where is it roughly?
+      <br />
+    - Image segmentation: what is in the image and where is it at the finest level?
+      <br />
+    - Keypoint detection: where are the important points/coordinates in the image?
+
+  </div>
+
+
+
+          <div> 
+    👁️ Let's go to <a href="https://huggingface.co/">Hugging Face</a> (have you explored this platform before?) for ready-to-use models (and web-based model inference APP) in:
+     <br />    
+    - Image classification
+      <br />
+    - Object detection
+      <br />
+    - Image segmentation
+      <br />
+    - Keypoint detection
+  </div>
+
+           <div> 
+    👁️ Let's go to <a href="https://github.com/tensorflow/tfjs-models/tree/master">Tensorflow.js github repo</a> (have you explored this platform before?) for models and demos in:
+     <br />    
+    - Image classification
+      <br />
+    - Object detection
+      <br />
+    - Image segmentation
+      <br />
+    - Hand/Pose/Facial Keypoint detection
+  </div>
+
+
+
+        <div> fun AI time 🎉
+
+      <br /> Artworks that uses face detection
+      <br /> - <a href="https://notnot.home.xs4all.nl/pareidolia/pareidolia.html">Pareidolia*</a>
+      <br /> - - facial detection is applied to grains of sand. A fully automated robot search engine examines the grains of sand in situ. When the machine finds a face in one of the grains, the portrait is recorded.
+      <br /> - <a href="https://www.youtube.com/watch?v=N-3NwGkF8Pw">Hello </a>
+       <br /> - - a large-scale kinetic sculpture in the form of an ancient Greek architectural pillar which observes its surroundings as if nodding to visitors, moving like a mutated snake.
+    </div>
+
+
+
+    <div> Check out computer vision models adopted by <a href="  https://developer.apple.com/machine-learning/models/">Apple Core ML</a> 
+     <br /> These are the "industry-level" models.
+     <br /> What attributes are important for models to be industry standard?
+    </div>
+
+        <div> Check out computer vision models adopted by <a href="  https://developer.apple.com/machine-learning/models/">Apple Core ML</a> 
+     <br /> What attributes are important for models to be industry standard?
+     <br /> - Performance in accuracy/precision/robustness, size, inference time (speed), etc. 
+
+ <br /> ✋Practice:
+      <br /> - Pick one model from <a href="  https://developer.apple.com/machine-learning/models/">this list</a> that can do one of the four basic computer vision tasks, and research on:
+      <br /> - - What is the model name?
+      <br /> - - Is there a public code repository e.g. github?
+      <br /> - - What dataset is the model trained on?
+      <br /> - - What is the size of the model?
+      <br /> - - Any inference time (speed) information?
+      <br /> - - Is the model trained from scratch or fine-tuned on another model?
+      <br /> - - What is the model performance like, on what evaluation metrics?
+      <br /> 👐 Let's share our findings after 25 mins!👐
+    </div>
+ 
+
+      <div> 
+    YOLO on <a href="https://github.com/ultralytics/ultralytics">Ultralytics</a> 
+     <br /> 
+     - an advanced computer vision model family first introduced by Joseph Redmon et al. in 2015, now maintained and developed (with different versions) by Ultralytics, known for its high speed, accuracy, and versatility.   
+      <br /> 
+    - are deployed in various industry applications including autonomous vehicles, robotics, text recognition, visual inspection systems, and more.
+      <br />
+    - now it is YOLOv11, though <a href="https://yolov8.com/">YOLOv8</a> is also widely used.
+      <br />  
+    - what is the full name of YOLO?  
+    <br />  
+    - A gentle introduction from the main developer <a href="https://www.youtube.com/watch?v=Cgxsv1riJhI">gentle introduction from the main developer</a>
+    
+  </div>
+
+
+    <div> 
+    YOLO on <a href="https://github.com/ultralytics/ultralytics">Ultralytics</a> 
+     <br /> 
+    - <a href="https://docs.ultralytics.com/tasks/">What are the tasks that YOLOv11 can do?</a>  
+      <br />
+    - What are the outputs of YOLOv11 for each of the tasks?
+
+  </div>
+  
+
+      <div> 
+    YOLO on <a href="https://github.com/ultralytics/ultralytics">Ultralytics</a> 
+     <br />    
+    Hands-on: 
+      <br />
+    - Inference YOLOv11 on the google colab notebook.
+      <br />
+    - Setup YOLOv11 on your laptop and inference YOLOv11 from your laptop.
+    <br />
+    📘 Keep a cool dev note of:
+      <br />
+    - - Error messages you have encountered
+    <br />
+    - - Words that you don't understand
+    <br /> 
+    - - Things that you find interesting
+  </div>
+
+        <div> 
+    YOLO on <a href="https://github.com/ultralytics/ultralytics">Ultralytics</a> 
+     <br />    
+    Homework:
+      <br />
+    - Inference YOLOv11 on your laptop for all 4 tasks, keep a record of the inference time.
+    <br />
+    - [optional] Setup YOLOv11 on the workstation and inference YOLOv11 from the workstation utilising GPU, keep a record of the inference time.
+    <br />
+    - SEND ME your dev note and inference time records by next Monday!
+    <br />
+    - [Optional but highly rewarding] Fine tuning YOLOv11 on the workstation, using a custom dataset (think of an applicatin that is interesting to you! check public datasets on <a href="https://public.roboflow.com/">roboflow</a> for inspiration).
+  </div>
+
+          <div> 
+    🕶️ What we have learnt today:
+      <br />
+    - Recap on data modalities and neural networks
+    <br />
+    - Image classification, Object detection, Image segmentation, Keypoint detection
+    <br />
+    - Played around with pre-trained computer vision models on Hugging Face, Tensorflow.js and Apple Core ML
+    <br />
+    - Inspect and inference an example of industry-level computer vision model: YOLOv11
+  </div>
+  
+  <div> 
+    We'll see you next Monday same time and same place!
+  </div>
+  
+</body>
+</html>

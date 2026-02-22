@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <title>Artificial Intelligence and Advanced Analytics 04</title>
+  <!-- This whole presentation was made with Big: https://github.com/tmcw/big -->
+  
+  <link href="../big/big.css" rel="stylesheet" type="text/css" />
+  <script src="../big/big.js"></script>
+  <link href="../big/themes/lightWhite.css" rel="stylesheet" type="text/css" />
+
+  <!-- Favicon link below, via https://emojitofavicon.com -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🍴</text></svg>"></link>
+  
+  <style>
+    body {
+      background-color: #EDDD6E;
+      font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+      /* font-weight: 700;*/
+      margin: 0;
+      padding: 0;
+      font-style: normal;
+      font-size: 21px;
+    }
+  </style>
+  
+</head>
+<body>
+  <div>
+    Session 03
+    <br />
+    AI applications in the audio domain 🎤   
+  </div>
+    
+  <div>Welcome 👩‍🎤🧑‍🎤👨‍🎤</div>
+  
+  <div> By the end of this lecture, we'll have learnt about:
+  
+     <br /> The theoretical: 
+     <br /> - Introduction to speech-to-text models
+     <br /> - Introduction to text-to-speech models
+     <br />  - Introduction to voice clone applications
+    
+     <br /> The practical: 
+     <br /> - build a web App that uses OpenAI's Whisper API (feedbacks on having more live demo session during the lecture - I hear you!)
+  
+  </div>
+  
+  <div> First of all, don't forget to confirm your attendence on <a href="https://www.arts.ac.uk/study-at-ual/course-regulations/attendance-policy/attendance-monitoring"> SEAtS App!  </a></div>
+
+   <div>
+ 🎤 Today we move from computer vision to the audio domain!
+     <br /> - Audio ≠ just sound — it can be speech, music, environment sound, ambient noise, bird singing, etc
+      <br /> - and for today we'll zoom into the realm of speech!
+     
+</div>
+    
+  <div>
+  <h2>🎤SPEECH!🎤</h2>
+  <p>- Speech is one of the most natural human communication forms.</p>
+  <p>- It carries linguistic content, emotion, and identity etc.</p>
+  <p>- AI application in speech aims to make computers understand and produce human speech naturally.</p>
+</div>
+
+
+
+
+<div>
+  <h3>What applications can AI models do with speech? </h3>
+  <p>Key applications include:</p>
+  <ul>
+    <li>Speech-to-text transcription, also called Automatic Speech Recognition</li>
+    <li>Text-to-speech synthesis</li>
+    <li>Voice Cloning </li>
+    <li>Speech Translation </li>
+    <li>Emotion Analysis (to be covered in week 08) </li>
+  </ul>
+</div>
+
+
+<div>
+  <h3>Speech-to-text models</h3>
+  <p>- Transforms spoken language into written text.</p>
+  <p>- Used in transcription, voice assistants, meeting notes, accessibility tools.</p>
+  <p>- also called Speech Recognition models </p>
+</div>
+
+
+<div>
+  <h3>How STT Works - the traditional way </h3>
+  <p>1. Audio signal processing → extract features (MFCCs, spectrograms, more on these later)</p>
+  <p>2. Acoustic model → map sounds to phonemes </p>
+  <p>3. Language model → predict words and grammar</p>
+  <p>4. Decoder → generate text output</p>
+  <p> - Traditional models used HMM + GMM.</p>
+</div>
+
+
+<div>
+  <h3>How STT Works - the state-of-the-art way</h3>  
+  <p>- Modern systems use deep neural networks (CNNs, RNNs, Transformers).</p>
+  <p>- End-to-end training replaces hand-crafted pipelines.</p>
+  <p>- End-to-end: using audio/audio features as input to directly predict into the text output, instead of going through the intermediate steps of phonemes, words, grammar. </p>
+</div>
+  
+  <div>
+  <h3>From Speech-to-Text to Understanding</h3>
+  <p>Once we have transcribed text, NLP models can analyze meaning.</p>
+  <p>Combining ASR (Automatic Speech Recognition) + LLMs → speech understanding.</p>
+</div>
+
+  <div>
+  <h3>SOTA, industry-level STT models include: </h3>  
+  <p>- <a href="https://openai.com/index/whisper/">Whisper by OpenAI</a> </p>
+  <p>- <a href="https://huggingface.co/nvidia/canary-1b">Canary 1B by NVIDIA </a></p>
+  <p>- <a href="https://github.com/modelscope/FunASR">FunASR</a></p>
+</div>
+  
+<div>
+  <h3>Whisper by OpenAI</h3>
+  <p>- Whisper is an open multilingual speech recognition model.</p>
+  <p>- Trained on 680k hours of diverse data.</p>
+  <p>- It enjoys a sequence-to-sequence Transformer architecture.</p>
+  <p>- Quite robust to accents, noise, and technical vocabulary.</p>
+</div>
+
+
+<div>
+  <h3>Practical: Using Whisper API</h3>
+  <p>Whisper API can transcribe audio to text in seconds.</p>
+  <p>We'll build a simple web app that:</p>
+  <ul>
+    <li>Uploads an audio file</li>
+    <li>Calls Whisper API</li>
+    <li>Receives the transcription response </li>
+    <li>Displays transcription</li>
+  </ul>
+</div>
+
+  <div>
+To start with:
+  <p>1. Do you have <a href="https://code.visualstudio.com/">VSCode</a> installed? </p> 
+  <p>2. Do you have <a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer">Live Server</a> installed in VSCode? Follow me if not! You can install it from within the VSCode!</p>
+  <p>3. Do you have a <a href="https://platform.openai.com/">OpenAI API Platform</a> account? Not exactly the same as your usual ChatGPT account so you might need to go through the registration process again, I used my Google account for this one.</p>
+</div>
+
+    <div>
+Step 1
+  <p>Download the source code <a href="https://moodle.arts.ac.uk/mod/resource/view.php?id=1556476">here</a>! </p> 
+  <p>- Make a folder on your desktop for contents from this unit, if you have not downe so</p>
+  <p>- Put the downlaoded zip file into that folder and unzip it!</p>
+</div>
+
+      <div>
+Step 2
+  <p> Open VSCode -> Under File -> Open Folder </p> 
+  <p> - Select the folder you just unzipped - "whisper-web-app" </p>
+</div>
+
+        <div>
+Step 3
+  <p> Have you seen the "Go Live" at the bottom bar? Click on it! </p> 
+  <p> - A web page should pop up in your default browser! </p>
+</div>
+
+          <div>
+Step 4
+  <p> Choose an audio file! and click "transcribe" </p> 
+  <p> - what happend? </p>
+</div>
+
+            <div>
+Step 5
+  <p> Back to the code, line 18 in the index.html </p> 
+  <p> - this is where we need to paste in our OpenAI API Key! </p>
+   <p> - <a href="https://platform.openai.com/settings/organization/api-keys">Where to create an OpenAI API key?</a> </p>
+  <p> - WARNING! NEVER PUBLISH YOUR OpenAI API KEY on the internet! </p>
+  
+</div>
+
+              <div>
+Step 6
+  <p> Create an API Key and paste that into your code! I'll demo! </p> 
+</div>
+
+                <div>
+Step 7
+  <p> OOOPS? No allowance? Use my key! </p> 
+</div>
+
+                  <div>
+🥳Now it's working!!!
+</div>
+
+              <div>
+A bit explaination on the code:
+  <p> - The "file" Line 21 is what holds the audio file we upload. </p> 
+  <p> - Line 30-34 is the API request we send to OpenAI </p>
+  <p> - The "data" in line 36 is what holds the response from OpenAI </p>
+   <p>- Line 36 is what holds the response from OpenAI. </p>
+   <p>- Line 37 displays the response. </p>
+</div>
+
+<div>Congrats!!!We just made a quick web APP for using OpenAI's API!🎉 
+ <p> Can you do more using other OpenAI's API? Of course! </p> 
+<p> Here's the <a href="https://platform.openai.com/docs/models">list</a> of pre-trained models (including the models behind ChatGPT), from a wide range of applications you can use in their API. </p> 
+  
+</div>
+
+  <div> 👏Let's move from Speech-to-Text to Text-to-Speech</div>
+
+
+<div>
+  <h3>Text-to-Speech (TTS)</h3>
+  <p>Converts text input into natural-sounding speech, and speech is in the audio domain.</p>
+  <p>Used in audio agent (Siri, Alexa), audiobooks, accessibility tools, etc.</p>
+</div>
+
+
+<div>
+  <h3>How TTS Works</h3>
+  <p>1. Text analysis → normalize text, expand numbers, detect punctuation.</p>
+  <p>2. Linguistic features → phonemes, prosody patterns.</p>
+  <p>3. Acoustic model → predict mel-spectrogram.</p>
+  <p>4. Vocoder → generate audio waveform from spectrogram.</p>
+</div>
+
+
+<div>
+  <h3>Neural TTS Models</h3>
+  <p>Traditional: Concatenative or parametric synthesis.</p>
+  <p>Modern: using deep neural networks.</p>
+  <p>Produces human-like intonation and voice quality.</p>
+</div>
+
+  <div>
+  <h3>SOTA, industry-level STT models include: </h3>  
+  <p>- <a href="https://platform.openai.com/docs/guides/text-to-speech">TTS models by OpenAI</a></p>    
+  <p>- <a href="https://github.com/resemble-ai/chatterbox">Chatterbox by Resemble AI </a></p>
+  <p>- <a href="https://huggingface.co/microsoft/VibeVoice-1.5B">VibeVoice by Microsoft</a></p>
+  <p>- <a href="https://docs.coqui.ai/en/latest/index.html">TTS models from Coqui.ai</a> </p>
+
+</div>
+  
+<div>
+  TTS demos on Hugging Face Spaces
+  <p>- <a href="https://huggingface.co/spaces/hexgrad/Kokoro-TTS">Kokoro-TTS</a></p>
+
+</div>
+
+
+
+<div>
+  <h3>Voice Cloning</h3>
+  <p>- Voice cloning aims to replicate a specific person’s voice.</p>
+  <p>- Uses a few seconds of target voice to adapt a TTS model.</p>
+   <p>- It is an application that is built on top of TTS!</p>
+  <p>- Applications: personalization, dubbing, accessibility — and ethical concerns.</p>
+</div>
+
+  <div>
+  <h3>Voice Cloning</h3>
+  <p>Let's play with <a href="https://huggingface.co/spaces/ResembleAI/Chatterbox-Multilingual-TTS">this SOTA multilingual voice cloning demo app on Hugging Face!</a>  </p>
+  <p>I scraped <a href="https://en.wikipedia.org/wiki/Nagato_(Naruto)">Pain(from Naruto)</a>'s voice for this... </p>
+</div>
+
+  
+  
+<div>
+  <h3>Mechanism of Voice Cloning</h3>
+  <p>1. Speaker embedding extraction from sample audio.</p>
+  <p>2. Conditioning the TTS model on this embedding.</p>
+  <p>3. Model generates speech in the target voice.</p>
+</div>
+
+
+<div>
+  <h3>Zero-Shot Voice Cloning</h3>
+  <p>Modern systems can mimic voices without retraining.</p>
+  <p>- Example: OpenAI's Voice Engine and Microsoft’s VALL-E.</p>
+  <p>- - They use embeddings learned from massive speaker datasets.</p>
+</div>
+
+
+<div>
+  <h3>Ethical and Security Concerns</h3>
+  <p>Voice deepfakes raise issues in consent, fraud, and misinformation.</p>
+  <p>- Solutions: watermarking, detection models, and voice authenticity verification.</p>
+</div>
+
+
+<div>
+  <h3>🤗Bringing It All Together</h3>
+  <p>Speech-to-Text + Text-to-Speech enables:</p>
+  <ul>
+    <li>Conversational AI</li>
+    <li>Combined with a text-to-text translation model, it can make real-time AUDIO translation</li>
+    <li>Accessibility tools</li>
+  </ul>
+</div>
+
+<div>
+  <h3>🕶️Future direction: </h3>
+  <p>combining speech, vision, and text for richer context.</p>
+  <p>Example: multimodal assistants that see, hear, and talk.</p>
+</div>
+
+
+<div>
+  <h3>Summary</h3>
+  <ul>
+    <li>AI in speech processing mainly include STT and TTS.</li>
+    <li>STT enables machines to listen.</li>
+    <li>TTS enables machines to speak.</li>
+    <li>Voice cloning is built on top of TTS and it personalizes interaction.</li>
+  </ul>
+</div>
+
+
+  <div> 
+    Homework:
+   <br />
+    - Using the STT APP we built in-class as a starting point, build a web app that include TTS APIs, e.g. <a href="https://platform.openai.com/docs/guides/text-to-speech">OpenAI's TTS API </a> 
+   <br />
+    - or  <a href="https://platform.openai.com/docs/guides/text-to-speech">Sora</a> for some text-to-video generative fun...
+      <br />
+    - If you does not have allowance on your account, send me a message and I'll send you my API keys!
+  <br />
+    - SEND ME your dev note by next Monday!
+  </div>
+
+   <div> 
+    🕶️ What we have learnt today:
+      <br />
+   Industry-level AI models for speech processing in
+     <br />
+    - Speech-to-Text
+    <br />
+    - Text-to-Speech, test with deployed model on hugging face!
+    <br />
+    - Voice Clone, test with deployed model on hugging face!
+    <br />
+    - Hands-on practice on using OpenAI's API in your web app 
+      <br />
+     (we built in class a demo web app today with OpenAI API for the Whisper model!)
+
+  </div>
+  
+  <div> 
+    We'll see you next Monday same time and same place!
+  </div>
+  
+</body>
+</html>

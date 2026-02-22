@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <title>Artificial Intelligence and Advanced Analytics 05</title>
+  <!-- This whole presentation was made with Big: https://github.com/tmcw/big -->
+  
+  <link href="../big/big.css" rel="stylesheet" type="text/css" />
+  <script src="../big/big.js"></script>
+  <link href="../big/themes/lightWhite.css" rel="stylesheet" type="text/css" />
+
+  <!-- Favicon link below, via https://emojitofavicon.com -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🍴</text></svg>"></link>
+  
+  <style>
+    body {
+      background-color: #EDDD6E;
+      font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+      /* font-weight: 700;*/
+      margin: 0;
+      padding: 0;
+      font-style: normal;
+      font-size: 21px;
+    }
+  </style>
+  
+</head>
+<body>
+  <div>
+
+    Session 04
+    <br />
+    Audio representation + AI applications in music 🥁 
+  </div>
+    
+  <div>Welcome 👩‍🎤🧑‍🎤👨‍🎤</div>
+  
+  <div> By the end of this lecture, we'll have learnt about:
+  
+     <br /> The theoretical: 
+     <br /> - Introduction to audio representations
+     <br /> - Introduction to AI applications in music
+    
+     <br /> The practical: 
+    <br /> - Use Librosa (in Python) library to extract spectrograms
+     <br /> - Use models from hugging face and test them on our machine (feedbacks on having more live demo session during the lecture - I hear you!)
+  
+  </div>
+  
+  <div> First of all, don't forget to confirm your attendence on <a href="https://www.arts.ac.uk/study-at-ual/course-regulations/attendance-policy/attendance-monitoring"> SEAtS App!  </a></div>
+
+   <div>
+ 🎤 Last week we have seen AI applications in the audio domain including Speech-to-Text, Text-to-Speech, and Voice Clone!
+      <br /> - Today we will go back to the basics first - what representation/features we can use as the input to neural networks and how to extract them from the raw waveform.
+     <br /> - Then we will move to apply AI in another beloved kind of audio - music!    
+</div>
+
+<div>
+  <h3>What is audio?</h3>
+  <p>Sound is the physical vibration that travels through a medium like air. </p>
+  <p>Audio refers to the electronic recording, transmission, or reproduction of that sound. </p>
+</div>
+
+  <div>
+  <h3>What is sound?</h3>
+  <p>Sound is the physical vibration that propagates through medium (e.g. air) as pressure waves.</p>
+  <p> - <a href="https://www.youtube.com/watch?v=QBYz82nS_xk">A YTB tutorial on sound</a>(DIY and well-made) </p>
+</div>
+
+
+<div>
+  <h3>Digital Audio Representation</h3>
+  <p>How can we use numbers to represent the continuous WAVE of sound? 🌊 </p>
+  <p>We sample it! 📝 </p>
+  <p>Sampling - the process of converting analog sound waves into a digital format by measuring the amplitude (loudness) of the sound wave at regular intervals. </p>
+   <p> - Just like taking notes at regular intervals when observing the wave📝 </p>
+  <p>Digital audio is a sequence of samples (numbers) representing the amplitude of sound over time.</p>
+  <p>Two main parameters for the sampling process:</p>
+  <ul>
+    <li><b>Sampling Rate (Hz):</b> how many samples per second (e.g., 44.1 kHz)</li>
+    <li><b>Bit Depth:</b> how many bits per sample (e.g., 16-bit = 65,536 levels)</li>
+  </ul>
+</div>
+
+
+<div>
+  <h3>Raw Waveform</h3>
+  <p>The waveform (the discrete sequence of samples in digital audio) is the most basic representation of audio.</p>
+  <p>It captures amplitude vs time.</p>
+  <p>Example: A 1-second 44.1 kHz mono clip = 44,100 numbers.</p>
+</div>
+
+
+<div>
+  <h3>Visualizing a Waveform</h3>
+  <p>We can plot the waveform as amplitude vs time to observe loudness and shape.</p>
+ <p> - hands-on practice later</p>
+</div>
+
+
+<div>
+  <h3>Limitations of the Raw Waveform</h3>
+  <ul>
+    <li>High dimensional (many samples per second)</li>
+    <li>Hard to interpret directly - what can we read from amplitudes seperated apart by 1/44100th second? </li>
+    <li> It does not explicitly show interpretable information such as the frequency content.</li>
+  </ul>
+</div>
+
+<div>
+
+  <p> From raw waveform to spectrograms!</p>
+
+</div>
+  
+<div>
+  <h3>Time vs Frequency Domain</h3>
+  <p>- The waveform is the time-domain audio representation.</p>
+  <p>- Audio can also be described in terms of its frequency component.</p>
+  <p>- We use transformations (like the Fourier Transform) to move from time to time-frequency domain. (no worries about understanding the technical details here!)</p>
+</div>
+
+
+<div>
+  <h3>Fourier Transform</h3>
+  <p>- Decomposes a signal into a sum of sinusoids.</p>
+  <p>- Shows which frequencies are present and their amplitudes.</p>
+  <p>- Fast Fourier Transform (FFT) is the efficient version used in audio processing.</p>
+  <p>[optional] <a href="https://www.youtube.com/watch?v=spUNpyF58BY">A good YTB tutorial on Fourier Transform</a></p>
+</div>
+
+
+<div>
+  <h3><a href="https://en.wikipedia.org/wiki/Spectrogram">Spectrogram</a></h3>
+  <p>A spectrogram shows how frequency content changes over time.</p>
+  <ul>
+    <li>x-axis: time</li>
+    <li>y-axis: frequency</li>
+    <li>color: amplitude or energy</li>
+  </ul>
+</div>
+
+
+<div>
+  <p>The technique behind extracting spectrogram from waveform: Short-Time Fourier Transform (STFT)</p>
+  <p>Audio is analyzed in short overlapping windows (frames).</p>
+  <p>Each window gives a spectrum → combined to form the spectrogram.</p>
+  <p>Provides both time and frequency resolution.</p>
+</div>
+
+
+<div>
+  <h3><a href="https://en.wikipedia.org/wiki/Mel_scale">Mel Scale</a></h3>
+  <p>Human perception of pitch is not linear.</p>
+  <p>The Mel scale compresses high frequencies to match human hearing sensitivity.</p>
+  <p>Mel Spectrogram = frequency in spectrogram bins mapped to Mel scale.</p>
+  
+</div>
+
+
+<div>
+  <h3><a href="https://huggingface.co/learn/audio-course/en/chapter1/audio_data">Log-Mel Spectrogram</a></h3>
+  <p>Logarithmic scaling of energy values (closer to how humans perceive loudness).</p>
+  <p>Common input representation for deep audio models (e.g., <a href="https://openai.com/index/whisper/">Whisper from OpenAI</a>).</p>
+</div>
+
+
+<div>
+  <h3><a href="https://learn.flucoma.org/reference/mfcc/">MFCCs</a> – Mel-Frequency Cepstral Coefficients</h3>
+  <p>Compact representation of the spectral envelope of sound.</p>
+  <p>Derived from log-mel spectrogram.</p>
+  <p>Widely used in speech recognition and speaker identification.</p>
+</div>
+
+
+<div>
+  <h3>Other Common Audio Features</h3>
+  <ul>
+    <li>Spectral Centroid – "brightness" of sound</li>
+    <li>Chroma Features – energy distribution across musical pitches</li>
+    <li>RMS Energy – perceived loudness</li>
+  </ul>
+</div>
+
+  <div>
+  <h3>Good NEWS!🥰 </h3>
+   <p>In practice, we use simple code from libraries to extract spectrograms, log-mel spectrograms, MFCCs, and more from audio files.</p>
+  <ul>
+    <li>Librosa </li>
+    <li>Torchaudio</li>
+    <li>Madmom</li>
+    <li>Essentia</li>
+    <li>etc.</li>
+  </ul>
+ 
+</div>
+
+
+
+<div>
+  <h3>From Features to Models</h3>
+  <p>Features become input to ML or DL models for tasks like:</p>
+  <ul>
+    <li>Speech recognition</li>
+    <li>Music genre classification</li>
+    <li>Emotion detection</li>
+  </ul>
+</div>
+
+<div>
+  <h3>Example: Audio Classification Pipeline for applications like <a href="https://birdnet.cornell.edu/">bird net</a> </h3>
+  <ul>
+    <li>Load raw audio waveform from an audio file</li>
+    <li>Extract Mel Spectrogram or MFCCs</li>
+    <li>Feed into CNN or Transformer</li>
+    <li>Predict label (e.g., “magpie”, “raven”, “blue jay”)</li>
+  </ul>
+</div>
+
+
+<div>
+  <h3>Going beyond: Deep Audio Embeddings</h3>
+  <p>Modern models (like OpenAI’s CLAP or AudioCLIP) learn embeddings directly from raw audio.</p>
+  <p>They map audio, text, and sometimes image data into a shared space.</p>
+</div>
+
+<div>
+  <h3>Summary</h3>
+  <ul>
+    <li>Raw waveform → time-domain data</li>
+    <li>Apply Fourier transformation to waveform to extract time-frequency-domain features</li>
+    <li> Spectrogram & > Mel Spectrogram & Log-Mel Spectrogram & MFCCs → perceptually meaningful representations</li>
+  </ul>
+</div>
+
+  
+
+  
+  <div>
+  <h2>Hands-on:  Audio representations〜🌊🌈</h2> 
+  <p>Commonly used Python libraries for extracting audio features are Librosa, Madmom and torchaudio. </p>
+  <p> <a href="https://wiki.cci.arts.ac.uk/books/how-to-guides/page/audio-files-with-librosa">Our CCI WIKI</a> for using Librosa to extract spectrograms. </p>
+   <p>Have you created a python environment before? </p> 
+  
+</div>
+
+  
+<div>
+  <h3>Let me demonstrate how to create a python environment in VSCode!</h3>
+
+</div>
+
+   <div>
+ <h3>Python environment - Step 1</h3>
+  <p> Create a python environment  </p> 
+  <p>- different ways to do this as listed <a href=https://code.visualstudio.com/docs/python/environments>here</a> </p>
+  <p>1. via VSCode command line </p>
+  <p>2. via terminal (classic) (conda create XXX) </p>
+</div>
+
+      <div>
+ <h3>Python environment - Step 2</h3>
+  <p> Don't forget to activate the environment you just created! </p> 
+
+   <p>1. via VSCode command line: select python interpreter </p>
+  <p>2. via terminal (classic)  (conda activate XXX) </p>
+</div>
+
+        <div>
+ <h3>Python environment - Step 3</h3>
+  <p> Install the dependencies (libraries) with pip install/p> 
+  <p> Have you seen "pip install XXX" before? </p>
+</div>
+
+  
+
+  <div>
+  <h3>Recommended learning resources</h3>
+    <p>The official tutorials from PyTorch for torchaudio: <a href=" https://docs.pytorch.org/tutorials/">select "Audio" from this page</a></p>
+  <p> Smooth learning curve from basics to applications: <a href="https://huggingface.co/learn/audio-course/chapter0/introduction">this Audio course on Hugging face</a> </p>
+  <p> To dive deeper:  <a href="https://musicinformationretrieval.com/">this web-page containing a series of colab notebooks</a>. </p>
+</div>
+
+
+
+                <div>
+     <h4>Example applications - Music related (there are so many and what listed below are very much non-exhaustive) </h4> 
+   <p> - 🤌 Music Information Retrieval  </p>
+   <p> -- A list of MIR applications from <a href="https://www.audiolabs-erlangen.de/resources/MIR/FMP/C0/C0.html">this textbook</a> (with comprehensive python notebooks of code examples) </p>
+ <p> - 🤌 Music source separation  </p>
+        <p> -- commercial products:  <a href="https://www.lalal.ai/">lalal.ai</a>,  <a href="https://vocali.se/en">vocali</a>, etc.  </p>
+       <p> -- research/open source projects:  <a href="https://github.com/facebookresearch/demucs">demucs</a>,  <a href="https://github.com/deezer/spleeter">spleeter</a>, etc.  </p>
+
+  <p> - 🤌 Music generation </p>
+                         
+           <p> -- <a href="https://deepmind.google/discover/blog/wavenet-a-generative-model-for-raw-audio/">WaveNet</a> (waveform as input, CNN-based)</p> 
+           <p> -- <a href="https://www.riffusion.com/">Riffusion</a> (spectrogram as input, diffusion-model-based)</p> 
+           <p> -- <a href="https://github.com/marcoppasini/musika">Musika</a> (spectrogram as input, GAN-model-based)</p> 
+          <p> -- <a href="https://suno.com/">Suno</a> </p> 
+                          
+ <p> also check out 🤌 <a href="https://magenta.tensorflow.org/">Google Magenta </a> (a box of machine learning for music and art tools) </p>         
+   </div>
+        
+        
+                 <div>
+     <h4><a href="https://github.com/acids-ircam/RAVE">RAVE</a></h4> 
+
+        <p> A audio synthesis (generation) model. </p>
+      <p> A real-time audio synthesis (generation) model. </p>                   
+     <p> Great impact on the creative community, experimented by artists including <a href="https://www.instagram.com/hexorcismos/">hexorcismos</a>, <a href="https://portraitxo.space/">portrait xo</a>, <a href="https://dadabots.com/faq.php">dadabots</a>, etc. </p>
+       <p> Techniques include self-supervised learning (VAE), Convolution neural network(conv layers and residual blocks), GAN, etc. </p>             
+        <p> Great explanation and demo from the author's <a href="https://www.youtube.com/live/KS7REAEhyJQ?si=ds9WwRxuRoGlCQt8">PhD defense</a>, demo starts at 42:20 </p>
+       
+</div>
+  
+
+  
+
+
+     
+  <div> 
+    Homework:
+   <br />
+    - Start thinking about your <a href="https://moodle.arts.ac.uk/mod/resource/view.php?id=1559297">final project</a>! 
+  <br />
+    - If you plan to work with content we have covered so far, send me a small proposal on what you plan to make and I'll recommend relevant resources!
+  <br />
+    - If you plan to work with content we have not covered so far, send me a message and I'll recommend early readings/preparation for you!
+  </div>
+
+   <div> 
+    🕶️ What we have learnt today:
+        <br />
+   - Audio representation: spectrogram and its variants
+     <br />
+    - Hands-on: using librosa (Python) to extract audio representations
+<br />
+     - Hands-on: create python environment! (the go-to first step for almost every python project)
+      <br />
+   - Industry-level AI applications in music
+
+  </div>
+  
+  <div> 
+    We'll see you next Monday same time and same place!
+  </div>
+  
+</body>
+</html>
