@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <title>Generative AI models in Computer Vision</title>
+  <!-- This whole presentation was made with Big: https://github.com/tmcw/big -->
+  
+  <link href="../big/big.css" rel="stylesheet" type="text/css" />
+  <script src="../big/big.js"></script>
+  <link href="../big/themes/lightWhite.css" rel="stylesheet" type="text/css" />
+
+  <!-- Favicon link below, via https://emojitofavicon.com -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🍴</text></svg>"></link>
+  
+  <style>
+    body {
+      background-color: #EDDD6E;
+      font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+      /* font-weight: 700;*/
+      margin: 0;
+      padding: 0;
+      font-style: normal;
+      font-size: 21px;
+    }
+  </style>
+  
+</head>
+<body>
+  <div>
+    AI in Computer Vision part 2 - generative models 👁️  
+  </div>
+    
+  <div>Welcome 👩‍🎤🧑‍🎤👨‍🎤</div>
+  
+  <div> By the end of this lecture, we'll have learnt about:
+  
+     <br /> The theoretical: 
+     <br /> - Introduction to generative models in computer vision
+     <br /> - Introduction to VAE model
+     <br />  - Introduction to GAN model
+     <br />  - Introduction to Diffusion models
+     <br /> The practical: 
+     <br /> - test(inference) GAN models on hugging face
+     <br /> - test(inference) Diffusion models on hugging face
+  
+  </div>
+  
+  <div> First of all, don't forget to confirm your attendence on <a href="https://www.arts.ac.uk/study-at-ual/course-regulations/attendance-policy/attendance-monitoring"> SEAtS App!  </a></div>
+
+  
+
+  <div> Three types of generative models in computer vision - different architectures and mechanisms </div>
+
+   <div> 🤓 what are we talking about when we talk about "a model that can generate images"? </div>
+
+  <div> 🤓 we are talking about: 
+     <br /> 
+    - models that can *output* images: what does this tell you about the shape of the last layer of the model?
+     <br /> 
+    - - The number of neurons in the last layer = [the number of pixels * the number of color channels] in the desired output image. </div>
+
+  <div> 🤓 we are talking about: 
+     <br /> 
+    - models that can output images *according to some human instruction*
+     <br /> 
+    - - We'll see later that human instruction can come from the curation of training dataset and/or model's input layer. </div>
+
+  <div> 🤓 we are talking about: 
+     <br /> 
+    - models that can output images that do not look like the same every time: there should be some sort of randomness in the inference process.
+     <br /> 
+    - - We'll see later that all generative models have some sort of "sampling process" to get "randomly sampled vectors" that are of the same shape but have different values everytime sampled. </div>
+
+  
+  <div>
+  Let's move on to demystify the main three image generative model families, one by one 😎
+    <br /> 
+    - VAE: Variational AutoEncoder 
+    <br /> 
+    - GAN: Generative Adversarial Networks
+    <br /> 
+    - Diffusion
+  </div>
+
+    <div> 😎 VAE
+    <br /> - Check the fun demo on this worth-reading article <a href="https://distill.pub/2017/aia/"> Using Artificial Intelligence to Augment Human Intelligence </a>
+     <br /> - The font generating model is a VAE under the hood. 
+  
+  </div>
+
+  <div> 😎 VAE is a variant of a neural net architecture called AE (Autoencoder) 
+  <br /> Let's start from introducing the architecture of AE.
+  </div>
+
+    <div>  AE - the architecture 🤗
+     <br /> 
+     - 1. It is characterised by a bottleneck hidden layer - layer that has a *small* number of neuron which forces information to be compressed to have lower dimensions.
+     <br /> 
+     - 2. Training is done via reconstructing the input, i.e. the output layer tries to output exactly what is in the input layer.
+      <br />  
+      - 3. This "encode - decoder" or "compress - decompress" setup may seem redundant, but doing so allows us to extract the "essence" representation from the bottleneck layer.
+  
+  </div>
+  
+  
+
+
+  <div>     
+       VAE - the architecture 🤗
+                  <br /> 
+                
+               Read <a href="https://towardsdatascience.com/difference-between-autoencoder-ae-and-variational-autoencoder-vae-ed7be1c038f2/">this article</a>
+
+                <br />
+                
+                - 1.The bottleneck layer of AE is deterministic - same input gets the same bottleneck representation.
+                     <br /> 
+                - 2. VAE changes the deterministic bottleneck layer into a layer with a distribution ("randomness").
+                 <br /> 
+                - 3. Check the article for why and how.
+                
+  </div>
+
+    <div>     
+       VAE - another application in the industry 🤗
+                  <br /> 
+                
+                <a href="https://en.wikipedia.org/wiki/Anomaly_detection">Anomaly Detection</a>
+
+
+                
+  </div>
+
+
+
+  <div> 😎 Move onto GAN </div>
+
+  <div> 
+    GAN 🕶️
+     <br />    
+    Fun applications: 
+      <br />   
+    - <a href="https://thispersondoesnotexist.com/">thispersondoesnotexist</a> 
+      <br />   
+    - <a href="https://thisjellyfishdoesnotexist.com/">/thisjellyfishdoesnotexist</a> 
+      <br />   
+    - <a href="https://gandissect.csail.mit.edu/">GAN dissect - surgical operations on images</a> 
+      <br />   
+    - <a href="https://github.com/XingangPan/DragGAN">DragGAN - more surgical operations on images </a> 
+  </div>
+  
+  
+  <div> 
+    How does GAN work? 🕶️ the configuration: 
+     <br />    
+    - It is an ensemble of two neural networks - a Generator (G) and a Discriminator (D).
+       <br />    
+     - We have a training dataset that comprises images that you want the model to model from, we would refer to these as "real" images, as opposed to the generated "fake" ones.
+ 
+  </div>
+
+    
+  <div> 
+    How does GAN work? 🕶️ what are the G and the D doing?
+     <br />    
+    - Discriminator: a good old classification model that predicts if an image is real (from the training dataset) or fake (being generated).
+       <br />    
+    - Generator: it take a random vector as input and outputs a 2D matrix as a generated image.
+  <br />    
+    (no magic yet... we just set up two individual neural nets.)
+
+  </div>
+
+    <div> 
+    How does GAN work? 🕶️ the training process:
+     <br />    
+    - The magic happens when we train G and D alternatively in a particlar way:
+       <br />    
+   - - It is a tom and jerry game between these two networks Generator 🐭 and Discriminator 🐈
+  <br />    
+   - - where D tries to catch G as a fake image generator ️🕵️‍♀️
+   <br />    
+   - - and G tries to fool D into thinking that G produces real images 🤡
+
+  </div>
+
+  <div>
+  <img src='https://red-x-silver.github.io/BSc-DSAI-Y3-AIAA-2025-2026/week-03/gan-diagram.png'/>
+</div>
+
+
+   <div> <a href="https://www.youtube.com/watch?v=_qB4B6ttXk8">a good explaination on YTB </a>   </div>
+
+
+
+        <div> 
+   Hands-on 🎳
+      <br />
+    - Let's take a look at this <a href="https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/generative/dcgan.ipynb">google colab notebook for training a simple GAN</a> 
+     <br />
+      - - Which part of code corresponds to Generator?
+           <br />
+      - - Which part of code corresponds to Discriminator?
+        <br />
+       - - Which part of code corresponds to assemblying G and D losses ?   
+        </div>
+
+          <div> 
+   Problems of the vanilla GAN
+      <br />
+    - 😥It is notoriously unstable to train sometimes.
+     <br />
+     - 🥵Think about what happen if the D learns too fast and becomes a really good discriminator while the generator has barely learned anything?
+           <br />
+      (The generator can no longer get good supervision signal and just get stuck being a noise generator - in this case we have to terminate the training and start over again with a different settup, e.g. another random seed, etc. )
+        </div>
+
+      <div> 
+    😎 Variants of GAN that performs better:
+     <br />    
+    - WGAN 
+      <br />
+    - <a href="https://jonathan-hui.medium.com/gan-wasserstein-gan-wgan-gp-6a1a2aa1b490">ProGAN</a> (Progressive growing GAN)
+      <br />
+    - <a href="https://pub.towardsai.net/introduction-to-stylegan-ec0a6b0706c">StyleGAN</a> 
+    <br />
+    StyleGAN is the "industry-level" GAN which is behind thispersondoesnotexist and <a href="https://thisxdoesnotexist.com/">more</a>  etc.
+
+  </div>
+
+     <div> 
+ Just in case if you want to train a <a href="https://github.com/red-x-silver/PokeGAN">Pokemon GAN</a>  
+  </div>
+  
+  
+       <div> 
+ 😎 DIFFUSION!
+         - Let's have some <a href="https://huggingface.co/spaces/stabilityai/stable-diffusion">stable diffusion fun</a>  
+  </div>
+
+      <div> 
+   😎 Diffusion model! - high level understanding - level 0
+     <br />    
+    - It's yet another generative model.
+      <br />
+    - Recall that the GAN model generates an image from some sampled random noise?
+<br />
+   - Diffusion model also generates an image from some sampled random noise.
+<br />
+    - Though the diffusion model deploys a very different mechanism for image denoising/generation.
+  </div>
+
+        <div> 
+    😎 Diffusion model! - high level understanding - level 1
+     <br />    
+    ✌️There are two processes involved in training a diffusion
+model: forward diffusion and backward diffusion.
+      <br />
+    - ⏩Forward diffusion: we start from a clear good image, and gradually add noises to it till it is completely noisy.
+<br />
+   - ⏪Backward/reverse diffusion: we start from a noise-only image, and gradually remove noises from it till it becomes a clear good image.
+<br />
+   - The actual generation process when inferencing a diffusion model is just that reverse diffusion process.
+  </div>
+  
+     <div> 
+ Check <a href=" https://youtu.be/J87hffSMB60?si=be9j3Y4JPRDJXeLz">this tutorial on stable diffusion</a>  
+  </div>
+
+       <div> 
+ How about the text input, aka the multi-modal stuff?
+         - Let's read <a href="https://jalammar.github.io/illustrated-stable-diffusion/">this article</a>  
+  </div>
+ 
+   
+        <div> 
+  
+    Homework:
+      <br />
+    - Inference <a href="https://github.com/NVlabs/stylegan3">StyleGAN3</a> or <a href="https://github.com/NVlabs/stylegan2">StyleGAN2</a> (choose one or more pre-trained models from the repos) on your laptop or CCI desktop computers (at UAL High Holborn 3rd floor).
+   <br />
+    - Train a <a href="https://github.com/red-x-silver/PokeGAN">Pokemon GAN</a> on your laptop or the CCI desktop computers (at UAL High Holborn 3rd floor). Show me your pokemons!
+   <br />
+     - Inference a stable diffusion model from your laptop with the <a href="https://huggingface.co/docs/diffusers/main/en/api/pipelines/stable_diffusion/overview">hugging face library for stable diffusions</a>, it is SO HANDY!
+    <br />
+    - [Optional but highly rewarding] Train a StyleGANX on the workstation, using a custom dataset (think of an applicatin that is interesting to you!).
+  </div>
+
+          <div> 
+    🕶️ What we have learnt today:
+      <br />
+   Three types of model family for generating images:
+    - VAE
+    <br />
+    - GAN
+    <br />
+    - Diffusion
+    <br />
+    - Inspect and inference examples of industry-level generative model: StyleGAN, Stable Diffusion
+  </div>
+  
+  <div> 
+    We'll see you next week same time and same place!
+  </div>
+  
+</body>
+</html>
