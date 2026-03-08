@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-  <title>Artificial Intelligence and Advanced Analytics 04</title>
+  <title>AI in audio</title>
   <!-- This whole presentation was made with Big: https://github.com/tmcw/big -->
   
   <link href="../big/big.css" rel="stylesheet" type="text/css" />
@@ -126,88 +126,6 @@
 </div>
 
 
-<div>
-  <h3>Practical: Using Whisper API</h3>
-  <p>Whisper API can transcribe audio to text in seconds.</p>
-  <p>We'll build a simple web app that:</p>
-  <ul>
-    <li>Uploads an audio file</li>
-    <li>Calls Whisper API</li>
-    <li>Receives the transcription response </li>
-    <li>Displays transcription</li>
-  </ul>
-</div>
-
-  <div>
-To start with:
-  <p>1. Do you have <a href="https://code.visualstudio.com/">VSCode</a> installed? </p> 
-  <p>2. Do you have <a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer">Live Server</a> installed in VSCode? Follow me if not! You can install it from within the VSCode!</p>
-  <p>3. Do you have a <a href="https://platform.openai.com/">OpenAI API Platform</a> account? Not exactly the same as your usual ChatGPT account so you might need to go through the registration process again, I used my Google account for this one.</p>
-</div>
-
-    <div>
-Step 1
-  <p>Download the source code <a href="https://moodle.arts.ac.uk/mod/resource/view.php?id=1556476">here</a>! </p> 
-  <p>- Make a folder on your desktop for contents from this unit, if you have not downe so</p>
-  <p>- Put the downlaoded zip file into that folder and unzip it!</p>
-</div>
-
-      <div>
-Step 2
-  <p> Open VSCode -> Under File -> Open Folder </p> 
-  <p> - Select the folder you just unzipped - "whisper-web-app" </p>
-</div>
-
-        <div>
-Step 3
-  <p> Have you seen the "Go Live" at the bottom bar? Click on it! </p> 
-  <p> - A web page should pop up in your default browser! </p>
-</div>
-
-          <div>
-Step 4
-  <p> Choose an audio file! and click "transcribe" </p> 
-  <p> - what happend? </p>
-</div>
-
-            <div>
-Step 5
-  <p> Back to the code, line 18 in the index.html </p> 
-  <p> - this is where we need to paste in our OpenAI API Key! </p>
-   <p> - <a href="https://platform.openai.com/settings/organization/api-keys">Where to create an OpenAI API key?</a> </p>
-  <p> - WARNING! NEVER PUBLISH YOUR OpenAI API KEY on the internet! </p>
-  
-</div>
-
-              <div>
-Step 6
-  <p> Create an API Key and paste that into your code! I'll demo! </p> 
-</div>
-
-                <div>
-Step 7
-  <p> OOOPS? No allowance? Use my key! </p> 
-</div>
-
-                  <div>
-🥳Now it's working!!!
-</div>
-
-              <div>
-A bit explaination on the code:
-  <p> - The "file" Line 21 is what holds the audio file we upload. </p> 
-  <p> - Line 30-34 is the API request we send to OpenAI </p>
-  <p> - The "data" in line 36 is what holds the response from OpenAI </p>
-   <p>- Line 36 is what holds the response from OpenAI. </p>
-   <p>- Line 37 displays the response. </p>
-</div>
-
-<div>Congrats!!!We just made a quick web APP for using OpenAI's API!🎉 
- <p> Can you do more using other OpenAI's API? Of course! </p> 
-<p> Here's the <a href="https://platform.openai.com/docs/models">list</a> of pre-trained models (including the models behind ChatGPT), from a wide range of applications you can use in their API. </p> 
-  
-</div>
-
   <div> 👏Let's move from Speech-to-Text to Text-to-Speech</div>
 
 
@@ -318,18 +236,6 @@ A bit explaination on the code:
 </div>
 
 
-  <div> 
-    Homework:
-   <br />
-    - Using the STT APP we built in-class as a starting point, build a web app that include TTS APIs, e.g. <a href="https://platform.openai.com/docs/guides/text-to-speech">OpenAI's TTS API </a> 
-   <br />
-    - or  <a href="https://platform.openai.com/docs/guides/text-to-speech">Sora</a> for some text-to-video generative fun...
-      <br />
-    - If you does not have allowance on your account, send me a message and I'll send you my API keys!
-  <br />
-    - SEND ME your dev note by next Monday!
-  </div>
-
    <div> 
     🕶️ What we have learnt today:
       <br />
@@ -340,15 +246,11 @@ A bit explaination on the code:
     - Text-to-Speech, test with deployed model on hugging face!
     <br />
     - Voice Clone, test with deployed model on hugging face!
-    <br />
-    - Hands-on practice on using OpenAI's API in your web app 
-      <br />
-     (we built in class a demo web app today with OpenAI API for the Whisper model!)
 
   </div>
   
   <div> 
-    We'll see you next Monday same time and same place!
+    I'll see you after the Easter break!
   </div>
   
 </body>
